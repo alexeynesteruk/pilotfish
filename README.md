@@ -122,13 +122,13 @@ Clone this repository, then start Claude Code **in the project you want
 pilotfish in** and point it at the runbook:
 
 ```bash
-git clone https://github.com/alexeynesteruk/pilotfish.git ~/src/pilotfish
+git clone https://github.com/alexeynesteruk/pilotfish.git ~/Documents/pilotfish
 cd /path/to/your/project
 claude
 ```
 
 ```text
-Read ~/src/pilotfish/install/PROJECT-INSTALL.md and follow it to install
+Read ~/Documents/pilotfish/install/PROJECT-INSTALL.md and follow it to install
 pilotfish into this project. Show me the full plan of changes and get my
 approval before writing anything.
 ```
@@ -187,7 +187,7 @@ so you never change a teammate's model or spend.
 To delegate uninstall to Claude Code, from inside the project:
 
 ```text
-Read ~/src/pilotfish/install/PROJECT-INSTALL.md and follow its Uninstall
+Read ~/Documents/pilotfish/install/PROJECT-INSTALL.md and follow its Uninstall
 section for this project: remove the eight pilotfish agent files from
 .claude/agents/ and the policy block from CLAUDE.md. Show me the full removal
 plan and get my approval before writing.
