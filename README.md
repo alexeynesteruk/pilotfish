@@ -55,7 +55,7 @@ configuration root.
 ```mermaid
 flowchart TD
     U["You"] --> I
-    subgraph MAIN["main session — opus family alias"]
+    subgraph MAIN["main session - opus family alias"]
         I["Interaction shape
 execute / explore_then_plan / co_discover"]
         I --> O

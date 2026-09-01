@@ -3,7 +3,7 @@
 All notable changes to this fork. The installed version is stamped inside the
 policy block in `~/.claude/CLAUDE.md` (`<!-- pilotfish vX.Y.Z -->`).
 
-## v1.4.1 — 2026-09-01 (fork cleanup)
+## v1.4.1 - 2026-09-01 (fork cleanup)
 
 Forked from [Nanako0129/pilotfish](https://github.com/Nanako0129/pilotfish)
 at v1.4.1. Trimmed for personal use: removed the benchmark evidence suite,
