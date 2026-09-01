@@ -1,7 +1,5 @@
 # Fable 5 Multi-Model Orchestration — Research Report
 
-> 繁體中文原版：[research.zh-TW.md](./research.zh-TW.md)（this is a faithful English translation）
-
 ## Purpose
 
 This document collects a sourced research pass from early July 2026 on "how to maximize the value of Claude Fable 5": Fable 5's real strengths versus Opus 4.8 and the scenarios where it's wasteful, the quota economics of Claude subscriptions, the multi-model orchestration mechanisms Claude Code officially provides, and the community's measured numbers and patterns. pilotfish's three-layer architecture (see [design.md](./design.md)) is the applied conclusion of this research. Method: four parallel research agents (official docs, community patterns, subscription economics, Claude Code mechanisms) plus a verification pass against code.claude.com official documentation; data current as of 2026-07-09.
@@ -11,12 +9,9 @@ This document collects a sourced research pass from early July 2026 on "how to m
 > changed pilotfish's default-selection trade-off: new installs now propose the
 > `opus` family alias, while Fable stays available through `/model fable`. The
 > alias configuration is documented in
-> [model configuration](https://code.claude.com/docs/en/model-config); the
-> isolated Opus 5 observation and its user-source routing limit are recorded in
-> the [compatibility Gate](../benchmarks/baton-compatibility/README.md), while
-> the decision and rollback criteria are tracked in
-> [#23](https://github.com/Nanako0129/pilotfish/issues/23). This does not rewrite
-> the historical measurements below or claim universal Opus 5 superiority.
+> [model configuration](https://code.claude.com/docs/en/model-config). This
+> does not rewrite the historical measurements below or claim universal
+> Opus 5 superiority.
 
 ## Contents
 

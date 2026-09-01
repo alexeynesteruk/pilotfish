@@ -3,7 +3,7 @@ set -eu
 PATH=/usr/bin:/bin
 export PATH
 
-MIGRATION_URL="https://github.com/Nanako0129/pilotfish/blob/main/install/PLUGIN-INSTALL.md#migrate-from-global-v1"
+MIGRATION_URL="https://github.com/alexeynesteruk/pilotfish/blob/main/install/PLUGIN-INSTALL.md#migrate-from-global-v1"
 
 if [ -n "${CLAUDE_CODE_SUBAGENT_MODEL:-}" ]; then
     printf '%s\n' "pilotfish Plugin blocked: CLAUDE_CODE_SUBAGENT_MODEL is non-empty and overrides every agent model frontmatter. Unset it, then restart or relaunch Claude Code."

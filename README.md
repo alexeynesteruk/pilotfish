@@ -10,7 +10,12 @@ legacy alternative. The policy uses the `opus` family for the main session,
 Sonnet and Haiku for bounded execution and reconnaissance, and fresh Opus
 contexts for risk-triggered review.
 
-[繁體中文](./README.zh-TW.md)
+This is a personal, trimmed fork of
+[Nanako0129/pilotfish](https://github.com/Nanako0129/pilotfish). The role
+policy, agent templates, and install runbooks are unchanged; removed are the
+benchmark evidence suite, the contributor test harness, translated docs,
+sponsorship links, and upstream-only governance files. See
+[CHANGELOG.md](./CHANGELOG.md) for exactly what changed.
 
 ## Contents
 
@@ -31,15 +36,7 @@ fresh-context reviewers at material acceptance boundaries.
 New installs default to the `opus` alias; Fable remains an explicit
 `/model fable` choice. This is a cost-aware default, not a claim that one model
 wins every task. The rationale and measurements live in
-[research](./docs/research.md), the [design notes](./docs/design.md), and
-[#23](https://github.com/Nanako0129/pilotfish/issues/23).
-
-| Host or use case | Project |
-|---|---|
-| Claude Code global policy | This repository |
-| Claude Code with session-scoped GPT routing | [remora](https://github.com/Nanako0129/remora-cc) |
-| Grok Build | [pilotfish-grok](https://github.com/Nanako0129/pilotfish-grok) |
-| Codex CLI | [pilotfish-codex](https://github.com/miyago9267/pilotfish-codex) |
+[research](./docs/research.md) and the [design notes](./docs/design.md).
 
 ## How it works
 
@@ -101,10 +98,7 @@ Before Baton or direct/delegated routing, pilotfish chooses the first matching
 interaction shape: `co_discover` while the outcome or acceptance is unclear;
 otherwise `explore_then_plan` when a clear direction is broad or high-impact;
 otherwise `execute` for a clear bounded outcome. This changes how the main
-session collaborates; it does not bypass risk or approval gates. The design is
-adapted from
-[pilotfish-codex's adaptive intent routing](https://github.com/miyago9267/pilotfish-codex/pull/14)
-by [@miyago9267](https://github.com/miyago9267). See the
+session collaborates; it does not bypass risk or approval gates. See the
 [design details](./docs/design.md#interaction-shape-before-worker-routing).
 
 Small, stable work stays in the main session. Larger work is split only when a
@@ -121,12 +115,6 @@ explained in the [design rationale](./docs/design.md).
 Use pilotfish. Follow its dispatch brake: keep direct work in the main session
 and call the named agents only when the policy selects delegation.
 ```
-
-The bounded results and claim limits are recorded in the
-[spontaneous-dispatch benchmark](./benchmarks/spontaneous-dispatch/README.md)
-and [`cue-free-tui.json`](./benchmarks/spontaneous-dispatch/cue-free-tui.json).
-They are behavioral observations, not a dispatch rate or proof of the active
-system-prompt bytes.
 
 ## Install
 
@@ -146,11 +134,11 @@ reliability, cross-version compatibility, or runtime namespace-collision proof.
 
 ### Legacy global install
 
-Clone the reviewed release, start Claude Code from that checkout, and ask it to
-follow the local runbook:
+Clone this checkout, start Claude Code from it, and ask it to follow the local
+runbook:
 
 ```bash
-git clone --branch v1.4.1 --depth 1 https://github.com/Nanako0129/pilotfish.git
+git clone --branch v1.4.1 --depth 1 https://github.com/alexeynesteruk/pilotfish.git
 cd pilotfish
 claude
 ```
@@ -206,19 +194,14 @@ before writing.
 
 | Topic | Document |
 |---|---|
-| Daily use and troubleshooting | [docs/usage.md](./docs/usage.md) · [繁體中文](./docs/usage.zh-TW.md) |
+| Daily use and troubleshooting | [docs/usage.md](./docs/usage.md) |
 | Architecture and policy decisions | [docs/design.md](./docs/design.md) |
-| Model economics and source research | [docs/research.md](./docs/research.md) · [繁體中文](./docs/research.zh-TW.md) |
-| Real long-session field report | [docs/field-report-tokscale-2026-07.zh-TW.md](./docs/field-report-tokscale-2026-07.zh-TW.md) |
-| Behavioral evidence and claim limits | [dispatch brake](./benchmarks/dispatch-brake/README.md) · [spontaneous dispatch](./benchmarks/spontaneous-dispatch/README.md) · [Baton activation](./benchmarks/baton-dispatch-effect/README.md) · [prompt compression](./benchmarks/prompt-compression/README.md) · [verifier boundary](./benchmarks/verifier-boundary/README.md) |
-| Contribution and evidence contracts | [CONTRIBUTING.md](./CONTRIBUTING.md) |
+| Model economics and source research | [docs/research.md](./docs/research.md) |
 
 ## Project
 
-pilotfish is MIT licensed. Behavioral compatibility claims require paid model
-runs, fresh verification, and maintained evidence; sponsorship helps fund those
-gates.
+pilotfish is MIT licensed. This fork is forked from and credits
+[Nanako0129/pilotfish](https://github.com/Nanako0129/pilotfish); see
+[LICENSE](./LICENSE) for the original copyright notice.
 
-[![Support pilotfish on Patreon](https://img.shields.io/badge/Support_on_Patreon-FF424D?style=for-the-badge&logo=patreon&logoColor=white)](https://www.patreon.com/cw/Nanako0129/membership)
-
-[License](./LICENSE) · [Contributing](./CONTRIBUTING.md)
+[License](./LICENSE)

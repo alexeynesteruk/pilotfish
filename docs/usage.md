@@ -5,8 +5,6 @@ questions. Installation and file mutation rules remain in the
 [install runbook](../install/AGENT-INSTALL.md); exact orchestration behavior
 remains in the [policy template](../templates/claude-md.orchestration.md).
 
-[繁體中文](./usage.zh-TW.md)
-
 ## Contents
 
 - [Model routing](#model-routing)
@@ -53,10 +51,6 @@ dispatch; the wrapper can optionally mention an already installed Baton skill.
 | Security-sensitive implementation after approval | `security-executor` |
 | Risk-triggered Plan or outcome challenge | `plan-verifier`, `security-reviewer`, or `verifier` |
 
-The [cue-free evidence](../benchmarks/spontaneous-dispatch/README.md) records
-where automatic dispatch did and did not occur. Those observations are bounded
-examples, not a dispatch rate or proof of the active system-prompt bytes.
-
 ## Configuration and compatibility
 
 | Situation | What to check |
@@ -80,8 +74,7 @@ examples, not a dispatch rate or proof of the active system-prompt bytes.
 | Understand spawn overhead | Every agent starts a fresh context and pays reconstruction plus integration cost; dispatch only when the combined benefit is positive |
 
 Model economics, official mechanisms, and measured limitations are documented
-in [research](./research.md), the [design rationale](./design.md), and the
-[behavioral benchmarks](../benchmarks/dispatch-brake/README.md).
+in [research](./research.md) and the [design rationale](./design.md).
 
 ## Long runs and verification
 

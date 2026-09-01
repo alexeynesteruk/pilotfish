@@ -1,7 +1,5 @@
 # pilotfish macOS and Linux Plugin beta install
 
-[繁體中文](./PLUGIN-INSTALL.zh-TW.md)
-
 > This experimental beta targets macOS and Linux. Linux requires Ubuntu 20.04+, Debian 10+, or Alpine Linux 3.19+ and an otherwise-working officially supported Claude Code installation, per the [official system requirements](https://code.claude.com/docs/en/setup#system-requirements) (checked 2026-08-22). macOS with Claude Code 2.1.239 is live-observed. Linux is contract-qualified only; it has not been tested, verified, or live-observed. Windows is excluded. SessionStart hooks are required for ambient activation. This beta does not claim stable reliability, cross-version compatibility, or runtime namespace-collision proof.
 
 The Plugin and the legacy global install must not coexist. The Plugin hook fails closed when the effective user `CLAUDE.md` contains canonical pilotfish markers or the known legacy policy header: it emits no policy and tells you to migrate.
@@ -256,14 +254,14 @@ Stop only when managed `availableModels` or another organization restriction pre
 For the current marketplace branch:
 
 ```bash
-claude plugin marketplace add --scope user Nanako0129/pilotfish
+claude plugin marketplace add --scope user alexeynesteruk/pilotfish
 claude plugin install --scope user pilotfish@pilotfish
 ```
 
 For a reviewed immutable release, replace `X.Y.Z` with one version and pin the marketplace to that exact repository tag:
 
 ```bash
-claude plugin marketplace add --scope user Nanako0129/pilotfish@vX.Y.Z
+claude plugin marketplace add --scope user alexeynesteruk/pilotfish@vX.Y.Z
 claude plugin install --scope user pilotfish@pilotfish
 ```
 
@@ -283,7 +281,7 @@ If you pinned an immutable release, `marketplace update` intentionally stays on 
 ```bash
 claude plugin uninstall --scope user pilotfish@pilotfish
 claude plugin marketplace remove --scope user pilotfish
-claude plugin marketplace add --scope user Nanako0129/pilotfish@vX.Y.Z
+claude plugin marketplace add --scope user alexeynesteruk/pilotfish@vX.Y.Z
 claude plugin install --scope user pilotfish@pilotfish
 ```
 
@@ -326,7 +324,7 @@ From the second Plugin-capable release onward, choose a prior `A.B.C` release wh
 ```bash
 claude plugin uninstall --scope user pilotfish@pilotfish
 claude plugin marketplace remove --scope user pilotfish
-claude plugin marketplace add --scope user Nanako0129/pilotfish@vA.B.C
+claude plugin marketplace add --scope user alexeynesteruk/pilotfish@vA.B.C
 claude plugin install --scope user pilotfish@pilotfish
 ```
 
@@ -337,7 +335,7 @@ Restart Claude Code. Do not combine a root release tag with a differently versio
 If startup shows this diagnostic, the hook intentionally emitted neither its sentinel nor policy:
 
 ```text
-pilotfish Plugin blocked: legacy global pilotfish detected. Follow https://github.com/Nanako0129/pilotfish/blob/main/install/PLUGIN-INSTALL.md#migrate-from-global-v1 to migrate, then restart Claude Code.
+pilotfish Plugin blocked: legacy global pilotfish detected. Follow https://github.com/alexeynesteruk/pilotfish/blob/main/install/PLUGIN-INSTALL.md#migrate-from-global-v1 to migrate, then restart Claude Code.
 ```
 
 Use the effective config root from Preflight, back it up, complete the legacy uninstall, and restart. A relative `CLAUDE_CONFIG_DIR`, missing absolute `HOME`, unreadable `CLAUDE.md`, or config-probe error also blocks policy emission until corrected.

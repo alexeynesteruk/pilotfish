@@ -5,10 +5,10 @@
   "version": "1.4.1",
   "description": "macOS and Linux Claude Code Plugin beta with hook-based ambient policy activation and namespaced role agents.",
   "author": {
-    "name": "Nanako0129",
-    "url": "https://github.com/Nanako0129"
+    "name": "alexeynesteruk",
+    "url": "https://github.com/alexeynesteruk"
   },
-  "repository": "https://github.com/Nanako0129/pilotfish",
+  "repository": "https://github.com/alexeynesteruk/pilotfish",
   "license": "MIT",
   "keywords": [
     "orchestration",

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document explains *why* pilotfish is shaped the way it is: three layers, role-based policy, aliases everywhere, effort tiers, and a verification gate. The empirical grounding (official docs, measured community numbers, subscription economics) lives in the [research report](./research.zh-TW.md); this is the argument from those facts to this design.
+This document explains *why* pilotfish is shaped the way it is: three layers, role-based policy, aliases everywhere, effort tiers, and a verification gate. The empirical grounding (official docs, measured community numbers, subscription economics) lives in the [research report](./research.md); this is the argument from those facts to this design.
 
 ## The three layers
 
@@ -47,7 +47,7 @@ The role set is the smallest one that covers the delegation patterns that actual
 | `plan-verifier` | Material Plans benefit from fresh-context challenge before approval, but that phase cannot rely on a prompt-only no-write promise. Its positive `tools: Read, Glob, Grep` allowlist enforces the boundary while Opus supplies the judgment needed to return `READY` / `REVISE`. |
 | `security-reviewer` | Pre-approval security evidence needs Opus-level judgment and an actually read-only surface. Its allowlist permits repository and external advisory reads while excluding Bash and every write-capable tool. |
 | `mech-executor` | Fully-specified work has its judgment already done — by the orchestrator, in the spec. Sonnet executes specs faithfully, and on subscriptions it additionally draws on the dedicated Sonnet-only weekly bucket (extra headroom on top of the shared all-models limit). |
-| `executor` | Real implementation needs local design judgment and is also the default volume implementation path. Sonnet keeps that path below an Opus main-loop fallback instead of paying Opus subagent cost with no tier saving ([#18](https://github.com/Nanako0129/pilotfish/issues/18)). This is a routing and cost-tier decision, not evidence that Sonnet is universally better for the role; no role-specific Opus-versus-Sonnet executor benchmark has been run. |
+| `executor` | Real implementation needs local design judgment and is also the default volume implementation path. Sonnet keeps that path below an Opus main-loop fallback instead of paying Opus subagent cost with no tier saving. This is a routing and cost-tier decision, not evidence that Sonnet is universally better for the role; no role-specific Opus-versus-Sonnet executor benchmark has been run. |
 | `verifier` | Official guidance: independent fresh-context verifiers outperform self-critique. After implementation it retains Bash to reproduce tests and returns calibrated `CONFIRMED` / `REFUTED` / `INCONCLUSIVE`, while write tools stay disabled — a verifier that fixes work stops being independent. |
 | `security-executor` | Approved security implementation deserves consistently high effort, and the frontier model's safety classifiers can refuse benign defensive-security work mid-task. Pre-routing it to Opus makes the refusal path unreachable instead of handled. It is intentionally separate from the read-only pre-approval reviewer. |
 
@@ -110,7 +110,7 @@ Role routing answers *which worker* should receive eligible work; it does not an
 
 Within each phase's safety boundary, pilotfish chooses by net benefit across model cost, scarce context, elapsed time, isolation, and fresh independence versus reconstruction, coordination, integration, and verification cost. Delegation does not have to win every axis: a bounded cheap worker can be useful despite a small latency penalty.
 
-A planning skill such as [Baton](https://github.com/cablate/baton) composes above this role layer. It may shape discovery questions, worker count, ownership, sequence, budgets, and stop conditions. pilotfish supplies the named Claude roles, model routing, leaf-agent boundary, approval gate, and verifier contract. Final Plan synthesis and judgment stay in the main session. The complete native-Claude lifecycle is captured in the [pilotfish + Baton compatibility gate](../benchmarks/baton-compatibility/README.md).
+A planning skill such as [Baton](https://github.com/cablate/baton) composes above this role layer. It may shape discovery questions, worker count, ownership, sequence, budgets, and stop conditions. pilotfish supplies the named Claude roles, model routing, leaf-agent boundary, approval gate, and verifier contract. Final Plan synthesis and judgment stay in the main session.
 
 This distinction matters most during exploratory debugging. Runtime traces, root-cause hypotheses, patch anchors, and live verification often form one tightly coupled code path. Handing the middle of that chain to a fresh executor makes the executor rebuild context while the orchestrator waits, then makes the orchestrator rebuild enough context to integrate the answer. Such one-path work remains in the main session; one unknown bug must not become a sequential scout-to-executor pipeline. A large cross-surface investigation can still use bounded read-only discovery, but it returns to main-session Plan synthesis before execution.
 
@@ -141,7 +141,7 @@ Effort is the second big quota lever after model choice, and the Fable-5 generat
 | `CLAUDE_CODE_SUBAGENT_MODEL` | It overrides every per-agent frontmatter globally, which is precisely the opposite of tiered routing. The installer warns if it's set. |
 | Pinned model IDs | Pinning trades resilience for reproducibility; for a personal global config, resilience wins. Organizations that need pinning have `ANTHROPIC_DEFAULT_*_MODEL`. |
 | An `opusplan` default | It's a great quota-saver but changes interactive feel (model switches mid-conversation). Offered as an opt-in in the FAQ instead. |
-| Installer profiles or main-loop autodetection ([#18](https://github.com/Nanako0129/pilotfish/issues/18)) | The default main session is now explicitly Opus and the default implementation path is Sonnet. A second tier map would double the installer surface without improving that common path; users who opt into another main model can still edit one role alias if needed. |
+| Installer profiles or main-loop autodetection | The default main session is now explicitly Opus and the default implementation path is Sonnet. A second tier map would double the installer surface without improving that common path; users who opt into another main model can still edit one role alias if needed. |
 
 The "smart brain, cheap hands" split predates pilotfish: Anthropic documents the
 same architecture in [Decoupling the brain from the hands](https://www.anthropic.com/engineering/managed-agents),

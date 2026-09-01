@@ -14,7 +14,7 @@ pilotfish is a global multi-model orchestration layer for Claude Code. It touche
 | `$CFG/agents/` | Install eight role agent files: `scout.md`, `Explore.md`, `plan-verifier.md`, `security-reviewer.md`, `mech-executor.md`, `executor.md`, `verifier.md`, `security-executor.md` |
 | `$CFG/CLAUDE.md` | Insert one `## Orchestration` section between `<!-- pilotfish:begin -->` and `<!-- pilotfish:end -->` markers |
 
-Source of truth for the files: the [templates/](../templates/) directory of this repository. If you are running inside a local clone, use those files directly; otherwise fetch each from `https://raw.githubusercontent.com/Nanako0129/pilotfish/main/templates/...`.
+Source of truth for the files: the [templates/](../templates/) directory of this repository. If you are running inside a local clone, use those files directly; otherwise fetch each from `https://raw.githubusercontent.com/alexeynesteruk/pilotfish/main/templates/...`.
 
 > ⚠️ **Commit pinning:** If the user's install prompt referenced this runbook at a specific commit SHA instead of `main`, fetch **every template from that same SHA** — never fall back to `main`. The point of pinning is that what the user reviewed is exactly what gets installed.
 
@@ -46,7 +46,7 @@ If the resolved root is not absolute, **stop and tell the user** their `CLAUDE_C
 When the user asks to **update** (rather than fresh-install), run this before Step 1:
 
 1. Detect the installed version: search `$CFG/CLAUDE.md` for `pilotfish v` inside the marker block. A version comment like `<!-- pilotfish v1.1.0 -->` gives the installed version; **markers present but no version comment means a pre-v1.1.0 install** (update recommended).
-2. Fetch the latest version and changelog from the same ref you were invoked from (`VERSION` and `CHANGELOG.md` at the repo root — e.g. `https://raw.githubusercontent.com/Nanako0129/pilotfish/main/VERSION`).
+2. Fetch the latest version and changelog from the same ref you were invoked from (`VERSION` and `CHANGELOG.md` at the repo root — e.g. `https://raw.githubusercontent.com/alexeynesteruk/pilotfish/main/VERSION`).
 3. If already up to date, say so and stop. Otherwise show the user the changelog entries between their version and the latest, then proceed with Steps 1–4 below — the install is idempotent, so an update is just a re-run: unchanged files are skipped, the policy block is replaced in place, and settings keys are only touched if missing.
 4. If the user customized any agent file, the Step 3.3 diff will surface it — never overwrite a customization without showing the diff and asking.
 

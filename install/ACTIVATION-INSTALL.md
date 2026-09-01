@@ -16,7 +16,7 @@ role agents or orchestration policy. Install pilotfish with
 | Paste the opt-in sentence | User prompt | Tested reference path; no extra install |
 | Invoke `/pilotfish <task>` | [User-invocable skill](https://code.claude.com/docs/en/slash-commands#control-who-invokes-a-skill) with the task in `$ARGUMENTS` | Recommended shortcut; closest to the tested user-prompt path |
 | Start `claude-pilotfish` | [`--append-system-prompt`](https://code.claude.com/docs/en/cli-usage#system-prompt-flags) adds one session instruction | Optional CLI wrapper; explicit launch, different prompt surface |
-| Model-selected `pilotfish-auto` | Model invokes an always-visible skill | Not shipped; experiment tracked in [#53](https://github.com/Nanako0129/pilotfish/issues/53) |
+| Model-selected `pilotfish-auto` | Model invokes an always-visible skill | Not shipped |
 | `UserPromptSubmit` hook | [Hook context](https://code.claude.com/docs/en/hooks#userpromptsubmit) wrapped as a system reminder | Not offered; it is not equivalent to a user request and may trigger prompt-injection defenses |
 
 The `/pilotfish` skill uses `disable-model-invocation: true`, so Claude cannot
