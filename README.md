@@ -156,6 +156,14 @@ Repeat the install per project. Projects are independent: nothing is shared
 between them, and a project without the policy block behaves like stock Claude
 Code.
 
+### Optional: a local model as the executor
+
+[`bin/qwen-exec.sh`](./bin/qwen-exec.sh) runs a local Qwen model as an
+execution route alongside the Claude roles: brief in, isolated git worktree,
+mechanical scope check, acceptance command, patch out. On-prem tokens are free,
+so the high-volume half of a session costs nothing. See
+[docs/qwen-executor.md](./docs/qwen-executor.md).
+
 ### A note on committing it
 
 `.claude/agents/` and `CLAUDE.md` are normally committed, so teammates who
@@ -191,6 +199,7 @@ plan and get my approval before writing.
 |---|---|
 | Daily use and troubleshooting | [docs/usage.md](./docs/usage.md) |
 | Architecture and policy decisions | [docs/design.md](./docs/design.md) |
+| Running a local Qwen model as an executor | [docs/qwen-executor.md](./docs/qwen-executor.md) |
 | Model economics and source research | [docs/research.md](./docs/research.md) |
 
 ## Project
