@@ -4,18 +4,18 @@
 > keeps planning, approval, integration, and final judgment.
 
 **pilotfish** is a multi-model orchestration policy for
-[Claude Code](https://code.claude.com). The [macOS and Linux Plugin beta](./install/PLUGIN-INSTALL.md)
-adds hook-based ambient activation; the global configuration install remains a
-legacy alternative. The policy uses the `opus` family for the main session,
-Sonnet and Haiku for bounded execution and reconnaissance, and fresh Opus
-contexts for risk-triggered review.
+[Claude Code](https://code.claude.com), installed **per project**. The main
+session runs on the `opus` family; Sonnet and Haiku handle bounded execution
+and reconnaissance; fresh Opus contexts handle risk-triggered review.
 
-This is a personal, trimmed fork of
-[Nanako0129/pilotfish](https://github.com/Nanako0129/pilotfish). The role
-policy, agent templates, and install runbooks are unchanged; removed are the
-benchmark evidence suite, the contributor test harness, translated docs,
-sponsorship links, and upstream-only governance files. See
-[CHANGELOG.md](./CHANGELOG.md) for exactly what changed.
+Nothing is written to `~/.claude/`. No plugin is registered, no hook runs, and
+no shell executes at session start. An install is eight agent files, one policy
+block, and an optional model setting, all inside the project you choose.
+
+This is a personal fork of
+[Nanako0129/pilotfish](https://github.com/Nanako0129/pilotfish), reworked from
+global installation to project scope. See [CHANGELOG.md](./CHANGELOG.md) for
+what diverged.
 
 ## Contents
 
@@ -33,24 +33,24 @@ documentation rather than frontier judgment. pilotfish routes those bounded
 paths to cheaper roles while keeping the main session accountable and using
 fresh-context reviewers at material acceptance boundaries.
 
-New installs default to the `opus` alias; Fable remains an explicit
+Per-project scoping means repositories where you do not want this are entirely
+unaffected, and the whole installation is plain text you can diff, commit, and
+revert with the repo.
+
+The default main session is the `opus` alias; Fable remains an explicit
 `/model fable` choice. This is a cost-aware default, not a claim that one model
 wins every task. The rationale and measurements live in
 [research](./docs/research.md) and the [design notes](./docs/design.md).
 
 ## How it works
 
-The Plugin beta packages the policy and namespaced roles under Claude Code's
-native Plugin lifecycle. The legacy global install uses these direct targets:
+Three layers, all inside one project:
 
 | Layer | Installed target | Responsibility |
 |---|---|---|
-| Machine | `~/.claude/settings.json` | Main-model alias and fallback chain |
-| Roles | `~/.claude/agents/*.md` | Model, effort, and capability boundary for each role |
-| Policy | `~/.claude/CLAUDE.md` | Dispatch, approval, verification, and long-run behavior |
-
-If `CLAUDE_CONFIG_DIR` is set, all `~/.claude/` paths above move under that
-configuration root.
+| Machine | `<project>/.claude/settings.local.json` | Main-model alias and fallback chain (optional) |
+| Roles | `<project>/.claude/agents/*.md` | Model, effort, and capability boundary for each role |
+| Policy | `<project>/CLAUDE.md` | Dispatch, approval, verification, and long-run behavior |
 
 ```mermaid
 flowchart TD
@@ -94,7 +94,7 @@ opus · fresh context"]
 | `verifier` | opus | medium | Fresh-context outcome falsification after implementation |
 | `security-executor` | opus | high | Approved security-sensitive implementation |
 
-Before Baton or direct/delegated routing, pilotfish chooses the first matching
+Before direct/delegated routing, pilotfish chooses the first matching
 interaction shape: `co_discover` while the outcome or acceptance is unclear;
 otherwise `explore_then_plan` when a clear direction is broad or high-impact;
 otherwise `execute` for a clear bounded outcome. This changes how the main
@@ -108,8 +108,8 @@ defined in the [policy template](./templates/claude-md.orchestration.md) and
 explained in the [design rationale](./docs/design.md).
 
 > ⚠️ **Automatic delegation is not guaranteed.** Higher-priority Claude Code
-> instructions can suppress Agent dispatch, and user-level `CLAUDE.md` cannot
-> override them. When the lifecycle matters, include the following request.
+> instructions can suppress Agent dispatch. When the lifecycle matters, include
+> the following request.
 
 ```text
 Use pilotfish. Follow its dispatch brake: keep direct work in the main session
@@ -118,76 +118,71 @@ and call the named agents only when the policy selects delegation.
 
 ## Install
 
-### Plugin beta for macOS and Linux
-
-Use the [Plugin beta install guide](./install/PLUGIN-INSTALL.md) for native
-user-scope marketplace commands, migration from global v1, update,
-disable/enable, uninstall, and rollback. The experimental beta targets macOS
-and Linux. Linux requires Ubuntu 20.04+, Debian 10+, or Alpine Linux 3.19+ and
-an otherwise-working officially supported Claude Code installation, per the
-[official system requirements](https://code.claude.com/docs/en/setup#system-requirements)
-(checked 2026-08-22). macOS with Claude Code 2.1.239 is live-observed. Linux is
-contract-qualified only; it has not been tested, verified, or live-observed.
-Windows is excluded. SessionStart hooks are required, the Plugin must not
-coexist with the legacy global install, and this beta does not claim stable
-reliability, cross-version compatibility, or runtime namespace-collision proof.
-
-### Legacy global install
-
-Clone this checkout, start Claude Code from it, and ask it to follow the local
-runbook:
+Clone this repository, then start Claude Code **in the project you want
+pilotfish in** and point it at the runbook:
 
 ```bash
-git clone --branch v1.4.1 --depth 1 https://github.com/alexeynesteruk/pilotfish.git
-cd pilotfish
+git clone https://github.com/alexeynesteruk/pilotfish.git ~/src/pilotfish
+cd /path/to/your/project
 claude
 ```
 
 ```text
-Read the local file install/AGENT-INSTALL.md in the current checkout and follow
-it to install pilotfish into my global Claude Code configuration. Show me the
-full plan of changes and get my approval before writing anything.
+Read ~/src/pilotfish/install/PROJECT-INSTALL.md and follow it to install
+pilotfish into this project. Show me the full plan of changes and get my
+approval before writing anything.
 ```
 
-> **Runtime requirement:** Claude Code **2.1.219 or newer**. Restart Claude Code
-> after installation so the agent directory and model setting are reloaded.
+> **Runtime requirement:** Claude Code **2.1.219 or newer**, for enforced agent
+> `tools` allowlists. Start a new session in the project after installing so the
+> agents directory and project memory are read.
 
-> ⚠️ **Trust boundary:** the policy loads into every future session. Review the
-> pinned checkout, the [agent templates](./templates/agents/), the
+> ⚠️ **Trust boundary:** the policy loads into every session in that project.
+> Review the [agent templates](./templates/agents/), the
 > [policy template](./templates/claude-md.orchestration.md), and the
-> [install runbook](./install/AGENT-INSTALL.md) before approving writes. Do not
-> bypass WebFetch prompt-injection protection to install from a mutable raw URL.
+> [install runbook](./install/PROJECT-INSTALL.md) before approving writes.
 
 | Target | Installed change | Reversible |
 |---|---|---|
-| `settings.json` | Adds missing `model` and `fallbackModel`; conditionally extends an existing `availableModels` allowlist | Restores or removes `model`; `fallbackModel` is removable, while allowlist additions remain unless requested |
-| `agents/` | Eight role-agent files | Yes |
+| `.claude/agents/` | Eight role-agent files | Yes |
 | `CLAUDE.md` | One versioned `pilotfish:begin/end` policy block | Yes |
+| `.claude/settings.local.json` | Optional `model` and `fallbackModel` for this project | Yes |
 
-The installer is idempotent and shows a merge plan before writing. Human-readable
-steps, backups, collision handling, verification, updates, and uninstall are all
-in [install/AGENT-INSTALL.md](./install/AGENT-INSTALL.md).
+The installer is idempotent and shows a merge plan before writing. Steps,
+backups, collision handling, verification, updates, and uninstall are all in
+[install/PROJECT-INSTALL.md](./install/PROJECT-INSTALL.md).
+
+Repeat the install per project. Projects are independent: nothing is shared
+between them, and a project without the policy block behaves like stock Claude
+Code.
+
+### A note on committing it
+
+`.claude/agents/` and `CLAUDE.md` are normally committed, so teammates who
+clone the repo inherit the roles and the policy. That is useful for a team that
+wants the same lifecycle, and unwanted otherwise. Keep the model pin in
+`.claude/settings.local.json` (git-ignored) rather than `.claude/settings.json`
+so you never change a teammate's model or spend.
 
 ## Operate
 
 | Task | Where to go |
 |---|---|
-| Install, update, disable, or remove the macOS and Linux Plugin beta | [Plugin beta guide](./install/PLUGIN-INSTALL.md) |
+| Install into a project | [Install runbook](./install/PROJECT-INSTALL.md) |
 | Tune models, effort, delegation, or managed settings | [Usage guide](./docs/usage.md) |
-| Activate pilotfish for a task or session | [Install `/pilotfish` or the CLI wrapper](./install/ACTIVATION-INSTALL.md) |
-| Update an existing install | [Runbook: Updating an existing install](./install/AGENT-INSTALL.md#updating-an-existing-install) |
-| Review release changes | [CHANGELOG.md](./CHANGELOG.md) |
-| Disable pilotfish for one project | Use a separate `CLAUDE_CONFIG_DIR`; details are in the [usage guide](./docs/usage.md#disable-update-or-uninstall) |
-| Uninstall safely | [Runbook: Uninstall](./install/AGENT-INSTALL.md#uninstall) |
+| Add a `/pilotfish` activation shortcut | [Activation guide](./install/ACTIVATION-INSTALL.md) |
+| Update an existing install | [Runbook: Updating an existing install](./install/PROJECT-INSTALL.md#updating-an-existing-install) |
+| Review changes in this fork | [CHANGELOG.md](./CHANGELOG.md) |
+| Disable pilotfish for a project | Remove the `pilotfish:begin/end` block from that project's `CLAUDE.md` |
+| Uninstall safely | [Runbook: Uninstall](./install/PROJECT-INSTALL.md#uninstall) |
 
-To delegate uninstall to Claude Code:
+To delegate uninstall to Claude Code, from inside the project:
 
 ```text
-Read the local install/AGENT-INSTALL.md, resolve the Claude Code configuration
-root exactly as Step 0 specifies, and follow its Uninstall section. In that
-configuration root, remove the eight pilotfish agent files and policy block.
-Show me the full removal and settings-restoration plan and get my approval
-before writing.
+Read ~/src/pilotfish/install/PROJECT-INSTALL.md and follow its Uninstall
+section for this project: remove the eight pilotfish agent files from
+.claude/agents/ and the policy block from CLAUDE.md. Show me the full removal
+plan and get my approval before writing.
 ```
 
 ## Documentation
@@ -200,7 +195,7 @@ before writing.
 
 ## Project
 
-pilotfish is MIT licensed. This fork is forked from and credits
+pilotfish is MIT licensed. This fork credits
 [Nanako0129/pilotfish](https://github.com/Nanako0129/pilotfish); see
 [LICENSE](./LICENSE) for the original copyright notice.
 

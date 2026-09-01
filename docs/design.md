@@ -10,11 +10,20 @@ The core observation is that "who orchestrates", "who executes what", and "how d
 
 | Layer | File | Changes when | Mechanism |
 |---|---|---|---|
-| Machine | `~/.claude/settings.json` | Your main-model policy changes | `model: "opus"` + `fallbackModel: ["sonnet"]` |
-| Roles | `~/.claude/agents/*.md` | A model tier is re-pointed | One `model:` line of frontmatter per role |
-| Policy | `~/.claude/CLAUDE.md` | Your working style changes | Prose rules written against role names |
+| Machine | `<project>/.claude/settings.local.json` | Your main-model policy changes | `model: "opus"` + `fallbackModel: ["sonnet"]` |
+| Roles | `<project>/.claude/agents/*.md` | A model tier is re-pointed | One `model:` line of frontmatter per role |
+| Policy | `<project>/CLAUDE.md` | Your working style changes | Prose rules written against role names |
 
 CLAUDE.md cannot set the main-session model (that is a settings/`/model` concern), which turns out to be a feature: it forces the clean split where settings decide *who* orchestrates and CLAUDE.md decides *how* it delegates.
+
+All three layers live inside one project. That is a deliberate departure from
+upstream pilotfish, which installs the same three layers globally under
+`~/.claude/`. Per-project scoping costs one copy step per repository and buys
+three things: repositories where you do not want role delegation are entirely
+unaffected, the model pin travels with the project rather than every session on
+the machine, and the whole installation is reviewable plain text you can diff
+and revert with the repo. The tradeoff is real - eight files and a policy block
+per project, and no ambient activation outside them.
 
 ## Role-based policy, model-free prose
 

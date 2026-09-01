@@ -2,7 +2,7 @@
 
 This guide collects day-to-day model, delegation, compatibility, and opt-out
 questions. Installation and file mutation rules remain in the
-[install runbook](../install/AGENT-INSTALL.md); exact orchestration behavior
+[install runbook](../install/PROJECT-INSTALL.md); exact orchestration behavior
 remains in the [policy template](../templates/claude-md.orchestration.md).
 
 ## Contents
@@ -55,11 +55,12 @@ dispatch; the wrapper can optionally mention an already installed Baton skill.
 
 | Situation | What to check |
 |---|---|
-| Custom configuration root | Every `~/.claude/` path moves under `CLAUDE_CONFIG_DIR`; the installer resolves it before writing |
-| Project-level `CLAUDE.md` | Claude Code stacks project and user memory; pilotfish never writes into the project |
-| Custom `Explore` role | Pins reconnaissance to Haiku, but unlike the built-in role it loads user memory; the policy self-disables inside subagent roles to limit that overhead |
+| Wrong project | Everything is relative to the directory you launch `claude` from; installing into a sibling or parent directory loads nothing |
+| Shared repository | `.claude/agents/`, `.claude/settings.json`, and `CLAUDE.md` are committed by default, so teammates inherit them; use `.claude/settings.local.json` for a personal model pin |
+| User-level agents of the same name | The project-level file wins inside this project; your `~/.claude/agents/` versions still apply everywhere else |
+| Custom `Explore` role | Pins reconnaissance to Haiku, but unlike the built-in role it loads project memory; the policy self-disables inside subagent roles to limit that overhead |
 | `availableModels` allowlist | Include `opus`, `fable`, `sonnet`, `haiku`, and the selected main-model value or role aliases may silently inherit the main model |
-| Managed or enterprise settings | Managed models, allowlists, and same-name agents outrank the user-level install; pilotfish does not bypass them |
+| Managed or enterprise settings | Managed models, allowlists, and same-name agents outrank a project install; pilotfish does not bypass them |
 | `claude-router` | Keep `forceRoute` off because it overrides agent frontmatter; `restoreDelegation` strips the separately tracked delegation injection |
 | Delegation-planning skills | Tools such as [Baton](https://github.com/cablate/baton) may shape work topology; pilotfish still owns named roles, model routing, approval, and verifier contracts |
 
@@ -95,8 +96,8 @@ detaching a process.
 
 | Action | Method |
 |---|---|
-| Update | Re-run the pinned install prompt and follow the runbook's **Updating an existing install** section |
+| Update | Re-run the install prompt and follow the runbook's **Updating an existing install** section |
 | Disable optional execution delegation | Ask the main session to work inline |
-| Disable pilotfish for one repository | Launch that repository with a separate `CLAUDE_CONFIG_DIR` that has no pilotfish policy block |
-| Disable the policy globally | Remove or comment the `pilotfish:begin/end` block, then start a new session |
-| Uninstall | Follow the runbook's **Uninstall** section so agent files and settings backups are handled safely |
+| Disable pilotfish for this project | Remove or comment the `pilotfish:begin/end` block in the project's `CLAUDE.md`, then start a new session |
+| Use it in another project | Run the install runbook there; projects are independent and nothing is shared between them |
+| Uninstall | Follow the runbook's **Uninstall** section, or simply delete `.claude/agents/` and the policy block - no global state exists |
