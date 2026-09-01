@@ -114,6 +114,12 @@ shape this route is for.
   on the gateway entry serializes; measured, two concurrent calls were both
   served by the LAN box rather than one escalating to another provider. A batch
   of executor runs queues on the single slot.
+- **Small `max_tokens` returns empty content.** The checkpoint is a reasoning
+  model: it fills `reasoning_content` before `content`. A trivial prompt at
+  `max_tokens: 25` came back with an empty answer and `finish_reason: length`.
+  Budget for reasoning on top of the answer, and check `reasoning_content`
+  before concluding the endpoint is broken. The Qwen Code harness sets its own
+  budgets, so this bites direct API calls rather than `qwen-exec.sh`.
 - **Long horizons are the weak spot, not syntax.** Published n=1 reports on
   local models of this class put tool-call format errors near 12% and describe
   cascade failures where the model keeps going after a subtask silently fails.
