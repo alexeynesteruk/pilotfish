@@ -36,6 +36,17 @@ Other changes:
   since `.claude/` and `CLAUDE.md` are normally committed and would otherwise
   change teammates' model routing and spend.
 
+Verified by installing into a scratch project on Claude Code 2.1.252, macOS:
+
+| Behavior | Evidence |
+|---|---|
+| All eight roles load from `.claude/agents/` | They appear as `subagent_type` values in a session started in that project |
+| A project `Explore.md` shadows the built-in Explore | A sentinel string in the project file's description came back verbatim |
+| A project `.claude/settings.local.json` `model` beats the user-level `model` | Project pin `haiku` against a user-level `opus[1m]`: the run reported `claude-haiku-4-5` |
+| Role frontmatter aliases still resolve under a full-model-ID `availableModels` allowlist | Main ran `claude-opus-5[1m]` while the dispatched `scout` ran `claude-haiku-4-5` |
+
+These are single-machine observations on one version, not general guarantees.
+
 ## v1.4.1 - 2026-09-01 (fork cleanup)
 
 Forked from [Nanako0129/pilotfish](https://github.com/Nanako0129/pilotfish)
