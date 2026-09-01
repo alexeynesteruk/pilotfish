@@ -104,10 +104,16 @@ shape this route is for.
   auto-execute at the calling process's privilege level. The worktree is
   isolation by convention, not a sandbox. Set `QWEN_SANDBOX=1` for qwen's own
   sandboxing where the platform supports it.
-- **The machine can be asleep.** The gateway entry is deliberately named
-  `qwen3.8-27b-local` rather than joining the `qwen3.8-27b` group, whose
-  failover would silently spill executor work onto paid Groq or Hetzner
-  capacity.
+- **The machine can be asleep, so the pinned name matters.** The gateway has
+  two entries pointing at this box. `qwen3.8-27b-local` has no failover at all,
+  and that is what this script uses by default: a run either reaches the LAN
+  box or fails loudly. The shared `qwen3.8-27b` group also has the box at
+  order 1, but falls through to paid Groq behind it, so it is the convenient
+  name and not a spend guarantee. Do not point executor batches at it.
+- **No parallel fan-out, and the limit does not overflow.** `max_parallel_requests: 1`
+  on the gateway entry serializes; measured, two concurrent calls were both
+  served by the LAN box rather than one escalating to another provider. A batch
+  of executor runs queues on the single slot.
 - **Long horizons are the weak spot, not syntax.** Published n=1 reports on
   local models of this class put tool-call format errors near 12% and describe
   cascade failures where the model keeps going after a subtask silently fails.
