@@ -147,7 +147,7 @@ Effort is the second big quota lever after model choice, and the Fable-5 generat
 |---|---|
 | Per-project configuration | The six projects audited before building this had zero model policy in their CLAUDE.md files — correctly. A single global source of truth is the whole point; project files stay pure technical notes. |
 | Enforcement hooks (spawn guards, stop guards à la fable5-orchestrator) | Powerful but heavy; policy-only works well before adding machinery. If discipline slips, hooks are the documented next step — see the research report. |
-| `CLAUDE_CODE_SUBAGENT_MODEL` | It overrides every per-agent frontmatter globally, which is precisely the opposite of tiered routing. The installer warns if it's set. |
+| `CLAUDE_CODE_SUBAGENT_MODEL` | A global default for subagents, which is the opposite altitude from per-role tiering. On 2.1.252 it fills in only where frontmatter is silent, so it does not break these roles; the installer still reports it because it retiers every other subagent. |
 | Pinned model IDs | Pinning trades resilience for reproducibility; for a personal global config, resilience wins. Organizations that need pinning have `ANTHROPIC_DEFAULT_*_MODEL`. |
 | An `opusplan` default | It's a great quota-saver but changes interactive feel (model switches mid-conversation). Offered as an opt-in in the FAQ instead. |
 | Installer profiles or main-loop autodetection | The default main session is now explicitly Opus and the default implementation path is Sonnet. A second tier map would double the installer surface without improving that common path; users who opt into another main model can still edit one role alias if needed. |

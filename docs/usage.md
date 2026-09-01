@@ -24,9 +24,16 @@ remains in the [policy template](../templates/claude-md.orchestration.md).
 | Explicit 1M context request | `model: "opus[1m]"` | Requests the documented 1M Opus alias where the provider supports it |
 | Primary model unavailable | `fallbackModel: ["sonnet"]` | Falls back on overload or unavailability; it does not catch authentication, billing, or rate-limit failures |
 
-Each role's model and effort live in its agent frontmatter. Do not set
-`CLAUDE_CODE_SUBAGENT_MODEL` unless you intentionally want to override every
-role, including the Opus review and security roles.
+Each role's model and effort live in its agent frontmatter.
+
+`CLAUDE_CODE_SUBAGENT_MODEL` supplies the model for subagents that declare no
+`model:` frontmatter. Measured on Claude Code 2.1.252, it does **not** override
+a role that declares one: with the variable set to `claude-sonnet-5`, `scout`
+still ran on `claude-haiku-4-5` while a control agent without a `model:` field
+ran on `claude-sonnet-5`. Since all eight roles declare a model, the variable
+leaves pilotfish routing intact, but it does silently retier every other
+subagent you have. Older versions documented the opposite precedence, so
+re-check after a Claude Code upgrade if the routing matters to you.
 
 ## Delegation behavior
 

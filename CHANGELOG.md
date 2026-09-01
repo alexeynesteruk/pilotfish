@@ -44,8 +44,16 @@ Verified by installing into a scratch project on Claude Code 2.1.252, macOS:
 | A project `Explore.md` shadows the built-in Explore | A sentinel string in the project file's description came back verbatim |
 | A project `.claude/settings.local.json` `model` beats the user-level `model` | Project pin `haiku` against a user-level `opus[1m]`: the run reported `claude-haiku-4-5` |
 | Role frontmatter aliases still resolve under a full-model-ID `availableModels` allowlist | Main ran `claude-opus-5[1m]` while the dispatched `scout` ran `claude-haiku-4-5` |
+| `CLAUDE_CODE_SUBAGENT_MODEL` does **not** override explicit `model:` frontmatter | With the variable forced to `claude-sonnet-5`: `scout` (`model: haiku`) ran `claude-haiku-4-5` and a control agent with no `model:` field ran `claude-sonnet-5`, in one session |
 
 These are single-machine observations on one version, not general guarantees.
+
+The last row corrects inherited upstream documentation, which stated that the
+variable "silently overrides every per-agent `model` frontmatter and defeats
+the entire tiering design." That was the documented resolution order as of July
+2026; it is not the behavior measured on 2.1.252. Corrected in the install
+runbook, `docs/usage.md`, `docs/design.md`, and flagged as superseded in the
+historical research report.
 
 ## v1.4.1 - 2026-09-01 (fork cleanup)
 

@@ -92,7 +92,7 @@ All verified line-by-line against official docs (code.claude.com — sub-agents,
 | Subagent `model` frontmatter | Accepts aliases (`sonnet`/`opus`/`haiku`/`fable`), full model IDs, `inherit` (the default when omitted) |
 | Subagent `effort` frontmatter | `low`/`medium`/`high`/`xhigh`/`max`, overrides session effort per agent |
 | Global agents directory | `~/.claude/agents/` (user level); project level is `.claude/agents/`; same-name conflicts resolve by scope priority |
-| Model resolution order | `CLAUDE_CODE_SUBAGENT_MODEL` env → Agent tool's per-invocation `model` param → frontmatter → main conversation model |
+| Model resolution order | As documented in July 2026: `CLAUDE_CODE_SUBAGENT_MODEL` env → Agent tool's per-invocation `model` param → frontmatter → main conversation model. **Superseded by measurement on 2.1.252** (2026-09-01): explicit `model:` frontmatter beats the env var, which now only fills in for agents that declare no model. See [usage](./usage.md#model-routing). |
 | `best` alias | Fable 5 where the org has access, otherwise latest Opus — the built-in frontier-degradation mechanism |
 | `fallbackModel` (settings) / `--fallback-model` | An ordered switch chain; fires on overload/unavailability (never on auth/billing/rate-limit errors), with a notice |
 | `opusplan` alias | Opus thinks in plan mode, auto-switches to Sonnet for execution — the built-in "strong model thinks, cheap model acts" |

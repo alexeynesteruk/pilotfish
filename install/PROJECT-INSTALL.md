@@ -46,10 +46,12 @@ Gather the current state before proposing anything:
 3. List `$PROJECT/.claude/agents/` and note which of the eight pilotfish filenames already exist. **Also read the `name:` frontmatter of every existing agent file (any filename)** - Claude Code resolves collisions by the `name` field, not the filename, and loads only one definition per name. If any existing agent already declares `name: scout`, `Explore`, `plan-verifier`, `security-reviewer`, `mech-executor`, `executor`, `verifier`, or `security-executor`, flag the collision in the plan and ask the user whether to rename theirs, skip that pilotfish role, or overwrite.
 4. Note any same-name agents at user level (`~/.claude/agents/`) or from an enabled plugin. A project-level file takes precedence for sessions in this project; report the shadowing in your summary so the user is not surprised elsewhere.
 5. Read `$PROJECT/.claude/settings.json` and `$PROJECT/.claude/settings.local.json` if present (note any existing `model`, `fallbackModel`, `availableModels`).
-6. Check whether the environment variable `CLAUDE_CODE_SUBAGENT_MODEL` is set (`echo "$CLAUDE_CODE_SUBAGENT_MODEL"`).
+6. Check whether the environment variable `CLAUDE_CODE_SUBAGENT_MODEL` is set, in the shell and in the `env` block of any settings file (`echo "$CLAUDE_CODE_SUBAGENT_MODEL"`).
 7. Check whether the project is a Git repository and whether `.claude/` is git-ignored. This decides the Step 3.4 recommendation.
 
-> ⚠️ **Warning:** If `CLAUDE_CODE_SUBAGENT_MODEL` is set, it silently overrides every per-agent `model` frontmatter and defeats the entire tiering design. Flag it in your plan and recommend unsetting it. Do not unset it yourself without approval.
+> **`CLAUDE_CODE_SUBAGENT_MODEL`:** on Claude Code 2.1.252 this variable sets the model for subagents that declare **no** `model:` frontmatter; it does **not** override a role that declares one. Measured directly: with `CLAUDE_CODE_SUBAGENT_MODEL=claude-sonnet-5`, `scout` (`model: haiku`) ran on `claude-haiku-4-5` while a control agent with no `model:` field ran on `claude-sonnet-5`, in the same session. All eight pilotfish roles declare a model, so a set variable does not break the tiering.
+>
+> Report the value in your plan anyway, for two reasons: it silently changes every *other* subagent in the user's setup, and older Claude Code versions documented the opposite precedence. Do not unset it without approval.
 
 ## Step 2 - Present the plan and get approval
 
